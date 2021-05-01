@@ -1,11 +1,15 @@
-// composition approach
+// inheritance approach
 
 import fs from 'fs';
 
-export class CsvFileReader {
-  data: string[][] = [];
+// mark class as abstract; for reusability, use generic <T> for data type
+export abstract class CsvFileReader<T> {
+  data: T[] = [];
 
   constructor(public filename: string) {}
+
+  // mark method as abstract
+  abstract mapRow(row: string[]): T;
 
   read(): void {
     this.data = fs
@@ -15,6 +19,7 @@ export class CsvFileReader {
       .split('\n')
       .map((row: string): string[] => {
         return row.split(',');
-      });
+      })
+      .map(this.mapRow);
   }
 }
