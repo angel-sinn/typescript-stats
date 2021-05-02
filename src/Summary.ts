@@ -9,8 +9,12 @@ export interface OutputTarget {
 }
 
 // composition
+// Summary has references to other objects to do heavy lifting, like a coordinator
 export class Summary {
   constructor(public analyzer: Analyzer, public outputTarget: OutputTarget) {}
-}
 
-new Summary(new WinsAnalysis(), new ConsoleReport());
+  buildAndPrintReport(matches: MatchData[]): void {
+    const output = this.analyzer.run(matches);
+    this.outputTarget.print(output);
+  }
+}
